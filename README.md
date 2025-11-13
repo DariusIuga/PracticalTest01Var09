@@ -1,2 +1,3 @@
 # PracticalTest01Var09
-colocviu 1 EIM
+
+Iuga Darius-Gabriel-Ioan 342C3
