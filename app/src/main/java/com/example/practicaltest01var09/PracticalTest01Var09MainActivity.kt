@@ -1,10 +1,16 @@
 package com.example.practicaltest01var09
 
+import android.app.Activity
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -14,6 +20,7 @@ class PracticalTest01Var09MainActivity : AppCompatActivity() {
     private lateinit var compute_button: Button
     private lateinit var next_term_text: EditText
     private lateinit var all_terms_text: TextView
+    private val intentFilter = IntentFilter()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +53,23 @@ class PracticalTest01Var09MainActivity : AppCompatActivity() {
             }
 
             next_term_text.setText("")
+        }
+
+        val activityResultsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                var sum_result = result.data?.extras?.getInt("SUM")
+                Log.w("SUMA", "SUMA ESTE ${sum_result}!");
+                Toast.makeText(this, "The activity returned with result OK. The sum is ${sum_result}", Toast.LENGTH_LONG).show()
+            }
+            else if (result.resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(this, "The activity returned with result CANCELED", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        compute_button.setOnClickListener {
+            val intent = Intent(this, PracticalTest01Var09SecondaryActivity::class.java)
+            intent.putExtra("TERMS", all_terms_text.text.toString())
+            activityResultsLauncher.launch(intent)
         }
     }
 }
